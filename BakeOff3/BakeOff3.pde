@@ -130,12 +130,19 @@ void draw()
     stroke(0);
     // First row
     for(int i = 0;i < 4;i++){
-      rect(width/2 - (2.0-i)*PPCM, height/2 - 1.0*PPCM, 1.0*PPCM, 1.0*PPCM);
+      rect(width/2 - (2.0-i)*PPCM, height/2, 1.0*PPCM, 1.0*PPCM);
+      text("c", width/2 - (2.0-i)*PPCM, height/2); 
     }
 
     //Second and third row
     for(int i = 0;i < 3;i++){
-      rect(width/2 - (2.0-i*4.0/3.0)*PPCM, height/2, 4.0/3.0*PPCM, 1.0*PPCM);
+      rect(width/2 - (2.0-i*4.0/3.0)*PPCM, height/2 - 1.0*PPCM, 4.0/3.0*PPCM, 1.0*PPCM);
+      textAlign(CENTER);
+      textSize(50);
+      text("a", width/2 - (2.0-i*4.0/3.0)*PPCM + (2.0/3.0)*PPCM, height/2 - 1.0*(PPCM/2)); 
+      textSize(35);
+      text("b", width/2 - (2.0-i*4.0/3.0)*PPCM + (1.0/3.0)*PPCM, height/2 - 1.0*(PPCM/2)); 
+      text("c", width/2 - (2.0-i*4.0/3.0)*PPCM + PPCM, height/2 - 1.0*(PPCM/2)); 
       rect(width/2 - (2.0-i*4.0/3.0)*PPCM, height/2 + 1.0*PPCM, 4.0/3.0*PPCM, 1.0*PPCM);
     }
  
