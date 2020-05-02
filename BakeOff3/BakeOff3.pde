@@ -127,7 +127,19 @@ void draw()
     noFill();
     rect(width/2 - 2.0*PPCM, height/2 - 1.0*PPCM, 4.0*PPCM, 3.0*PPCM);
     
-    // Write current letter
+    stroke(0);
+    // First row
+    for(int i = 0;i < 4;i++){
+      rect(width/2 - (2.0-i)*PPCM, height/2 - 1.0*PPCM, 1.0*PPCM, 1.0*PPCM);
+    }
+
+    //Second and third row
+    for(int i = 0;i < 3;i++){
+      rect(width/2 - (2.0-i*4.0/3.0)*PPCM, height/2, 4.0/3.0*PPCM, 1.0*PPCM);
+      rect(width/2 - (2.0-i*4.0/3.0)*PPCM, height/2 + 1.0*PPCM, 4.0/3.0*PPCM, 1.0*PPCM);
+    }
+ 
+    /* Write current letter
     textAlign(CENTER);
     fill(0);
     text("" + currentLetter, width/2, height/2);             // draw current letter
@@ -137,6 +149,7 @@ void draw()
     imageMode(CORNER);
     image(leftArrow, width/2 - ARROW_SIZE, height/2, ARROW_SIZE, ARROW_SIZE);
     image(rightArrow, width/2, height/2, ARROW_SIZE, ARROW_SIZE);  
+    */
   }
   
   // Draw the user finger to illustrate the issues with occlusion (the fat finger problem)
