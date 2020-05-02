@@ -1,3 +1,4 @@
+
 // Bakeoff #3 - Escrita de Texto em Smartwatches
 // IPM 2019-20, Semestre 2
 // Entrega: exclusivamente no dia 22 de Maio, até às 23h59, via Twitter
@@ -25,6 +26,9 @@ int ARM_HEIGHT;
 // Arrow parameters
 PImage leftArrow, rightArrow;
 int ARROW_SIZE;
+
+//Image arrow
+PImage arrows;
 
 // Study properties
 String[] phrases;                   // contains all the phrases that can be tested
@@ -55,6 +59,7 @@ void setup()
   fingerOcclusion = loadImage("finger.png");
   leftArrow = loadImage("left.png");
   rightArrow = loadImage("right.png");
+  arrows = loadImage("arrows.png");
   
   // Load phrases
   phrases = loadStrings("phrases.txt");                       // load the phrase set into memory
@@ -127,7 +132,75 @@ void draw()
     noFill();
     rect(width/2 - 2.0*PPCM, height/2 - 1.0*PPCM, 4.0*PPCM, 3.0*PPCM);
     
-    // Write current letter
+    stroke(0);
+    
+    char letter = 'a';
+
+    //First row
+    for(int i = 0;i < 3;i++){
+      rect(width/2 - (2.0f-i*4.0f/3.0f)*PPCM, height/2 - 1.0f*PPCM, 4.0f/3.0f*PPCM, 1.0f*PPCM);
+      textAlign(CENTER);
+      textSize(50);
+      text(letter++, width/2 - (2.0f-i*4.0f/3.0f)*PPCM + (2.0f/3.0f)*PPCM, height/2 - 1.0f*(PPCM/2)); 
+      textSize(35);
+      text(letter++, width/2 - (2.0f-i*4.0f/3.0f)*PPCM + (1.0f/3.0f)*PPCM, height/2 - 1.0f*(PPCM/2)); 
+      text(letter++, width/2 - (2.0f-i*4.0f/3.0f)*PPCM + (2.0f/3.0f)*PPCM, height/2 - 1.0f*(PPCM/2) + (1.0f/3.0f)*PPCM); 
+      text(letter++, width/2 - (2.0f-i*4.0f/3.0f)*PPCM + PPCM, height/2 - 1.0f*(PPCM/2)); 
+    }
+    
+    // Second row
+    for(int i = 0;i < 4;i++){
+      if (i == 0 || i ==3) rect(width/2 - (2.0f-i)*PPCM, height/2, 1.0f*PPCM, 1.0f*PPCM);
+      else rect(width/2 - (2.0f-i)*PPCM, height/2, 1.0f*PPCM, 1.0f*PPCM);
+      textSize(50);
+      
+     if (i == 0) {
+       text(letter++, width/2 - (2.0f-i)*PPCM + (1.0f/3.0f)*PPCM, height/2 + (2.5f/3.0f)*PPCM); 
+     }
+     else if (i == 3) {
+       text(letter++, width/2 - (2.0f-i)*PPCM + (2.0f/3.0f)*PPCM, height/2 + (2.5f/3.0f)*PPCM); 
+     }
+     else {
+      text(letter++, width/2 - (2.0f-i)*PPCM + (1.5f/3.0f)*PPCM, height/2 + (2.5f/3.0f)*PPCM); 
+     }
+      textSize(35);
+      if (i != 0) {
+        //text(letter++, width/2 - (2.0-i)*PPCM + (0.5/3.0)*PPCM, height/2 + (2.5/3.0)*PPCM); //esquerda
+        if (i != 3) {
+          text(letter++, width/2 - (2.0f-i)*PPCM + (0.5f/3.0f)*PPCM, height/2 + (2.5f/3.0f)*PPCM); //esquerda
+          text(letter++, width/2 - (2.0f-i)*PPCM + (1.5f/3.0f)*PPCM, height/2 + (1.1f/3.0f)*PPCM); //cima
+        }
+        else {
+          text(letter++, width/2 - (2.0f-i)*PPCM + (1.0f/3.0f)*PPCM, height/2 + (2.5f/3.0f)*PPCM); //esquerda
+          text(letter++, width/2 - (2.0f-i)*PPCM + (2.0f/3.0f)*PPCM, height/2 + (1.1f/3.0f)*PPCM); //cima p direita
+        }
+      }
+      else { //primeiro quadro
+        text(letter++, width/2 - (2.0f-i)*PPCM + (1.0f/3.0f)*PPCM, height/2 + (1.1f/3.0f)*PPCM); //cima 
+      }
+      if (i != 3) {
+        if (i !=0) text(letter++, width/2 - (2.0f-i)*PPCM + (2.5f/3.0f)*PPCM, height/2 + (2.5f/3.0f)*PPCM); //direita
+        else text(letter++, width/2 - (2.0f-i)*PPCM + (2.2f/3.0f)*PPCM, height/2 + (2.5f/3.0f)*PPCM); //direita
+      }
+    }
+    
+    
+    
+    //Third row
+    for(int i = 0;i < 3;i++){
+      
+      rect(width/2 - (2.0f-i*4.0f/3.0f)*PPCM, height/2 + 1.0f*PPCM, 4.0f/3.0f*PPCM, 1.0f*PPCM);
+      if (i == 0) text('_', width/2 - (2.0f-i*4.0f/3.0f)*PPCM + (2.0f/3.0f)*PPCM, height/2 + 1.0f*PPCM + (2.0f/3.0f)*PPCM); 
+      if (i == 1) {
+          imageMode(CENTER);
+          image(arrows, width/2 - (2.0f-i*4.0f/3.0f)*PPCM + (2.0f/3.0f)*PPCM, height/2 + 1.0f*PPCM + (1.5f/3.0f)*PPCM, arrows.width/7, arrows.height/7);
+        
+      }
+      if (i == 2) text("'", width/2 - (2.0f-i*4.0f/3.0f)*PPCM + (2.0f/3.0f)*PPCM, height/2 + 1.0f*PPCM + (2.0f/3.0f)*PPCM); 
+  
+    }
+    
+    /* Write current letter
     textAlign(CENTER);
     fill(0);
     text("" + currentLetter, width/2, height/2);             // draw current letter
@@ -137,6 +210,7 @@ void draw()
     imageMode(CORNER);
     image(leftArrow, width/2 - ARROW_SIZE, height/2, ARROW_SIZE, ARROW_SIZE);
     image(rightArrow, width/2, height/2, ARROW_SIZE, ARROW_SIZE);  
+    */
   }
   
   // Draw the user finger to illustrate the issues with occlusion (the fat finger problem)
