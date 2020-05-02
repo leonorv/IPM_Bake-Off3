@@ -127,26 +127,7 @@ void draw()
     noFill();
     rect(width/2 - 2.0*PPCM, height/2 - 1.0*PPCM, 4.0*PPCM, 3.0*PPCM);
     
-    stroke(0);
-    // First row
-    for(int i = 0;i < 4;i++){
-      rect(width/2 - (2.0-i)*PPCM, height/2, 1.0*PPCM, 1.0*PPCM);
-      text("c", width/2 - (2.0-i)*PPCM, height/2); 
-    }
-
-    //Second and third row
-    for(int i = 0;i < 3;i++){
-      rect(width/2 - (2.0-i*4.0/3.0)*PPCM, height/2 - 1.0*PPCM, 4.0/3.0*PPCM, 1.0*PPCM);
-      textAlign(CENTER);
-      textSize(50);
-      text("a", width/2 - (2.0-i*4.0/3.0)*PPCM + (2.0/3.0)*PPCM, height/2 - 1.0*(PPCM/2)); 
-      textSize(35);
-      text("b", width/2 - (2.0-i*4.0/3.0)*PPCM + (1.0/3.0)*PPCM, height/2 - 1.0*(PPCM/2)); 
-      text("c", width/2 - (2.0-i*4.0/3.0)*PPCM + PPCM, height/2 - 1.0*(PPCM/2)); 
-      rect(width/2 - (2.0-i*4.0/3.0)*PPCM, height/2 + 1.0*PPCM, 4.0/3.0*PPCM, 1.0*PPCM);
-    }
- 
-    /* Write current letter
+    // Write current letter
     textAlign(CENTER);
     fill(0);
     text("" + currentLetter, width/2, height/2);             // draw current letter
@@ -156,7 +137,6 @@ void draw()
     imageMode(CORNER);
     image(leftArrow, width/2 - ARROW_SIZE, height/2, ARROW_SIZE, ARROW_SIZE);
     image(rightArrow, width/2, height/2, ARROW_SIZE, ARROW_SIZE);  
-    */
   }
   
   // Draw the user finger to illustrate the issues with occlusion (the fat finger problem)
