@@ -46,6 +46,8 @@ float lettersEnteredTotal  = 0;     // a running total of the number of letters 
 float lettersExpectedTotal = 0;     // a running total of the number of letters expected (correct phrases)
 float errorsTotal          = 0;     // a running total of the number of errors (when hitting next)
 
+
+
 //Setup window and vars - runs once
 void setup()
 {
@@ -138,50 +140,41 @@ void draw()
 
     //First row
     for(int i = 0;i < 3;i++){
-      rect(width/2 - (2.0f-i*4.0f/3.0f)*PPCM, height/2 - 1.0f*PPCM, 4.0f/3.0f*PPCM, 1.0f*PPCM);
+      rect(width/2 - (2f-i*4f/3f)*PPCM, height/2 - 1f*PPCM, 4f/3f*PPCM, 1f*PPCM);
       textAlign(CENTER);
       textSize(50);
-      text(letter++, width/2 - (2.0f-i*4.0f/3.0f)*PPCM + (2.0f/3.0f)*PPCM, height/2 - 1.0f*(PPCM/2)); 
+      text(letter++, width/2 - (2f-i*4f/3f)*PPCM + (2f/3f)*PPCM, height/2 - 1f*(PPCM/2)); 
       textSize(35);
-      text(letter++, width/2 - (2.0f-i*4.0f/3.0f)*PPCM + (1.0f/3.0f)*PPCM, height/2 - 1.0f*(PPCM/2)); 
-      text(letter++, width/2 - (2.0f-i*4.0f/3.0f)*PPCM + (2.0f/3.0f)*PPCM, height/2 - 1.0f*(PPCM/2) + (1.0f/3.0f)*PPCM); 
-      text(letter++, width/2 - (2.0f-i*4.0f/3.0f)*PPCM + PPCM, height/2 - 1.0f*(PPCM/2)); 
+      text(letter++, width/2 - (2f-i*4f/3f)*PPCM + (1f/3f)*PPCM, height/2 - 1f*(PPCM/2)); //left
+      text(letter++, width/2 - (2f-i*4f/3f)*PPCM + (2f/3f)*PPCM, height/2 - 1f*(PPCM/2) + (1f/3f)*PPCM); //down
+      text(letter++, width/2 - (2f-i*4f/3f)*PPCM + 1f*PPCM, height/2 - 1f*(PPCM/2)); //right
     }
     
     // Second row
+    float pos;
     for(int i = 0;i < 4;i++){
-      if (i == 0 || i ==3) rect(width/2 - (2.0f-i)*PPCM, height/2, 1.0f*PPCM, 1.0f*PPCM);
-      else rect(width/2 - (2.0f-i)*PPCM, height/2, 1.0f*PPCM, 1.0f*PPCM);
+      rect(width/2 - (2f-i)*PPCM, height/2, 1f*PPCM, 1f*PPCM);
       textSize(50);
       
-     if (i == 0) {
-       text(letter++, width/2 - (2.0f-i)*PPCM + (1.0f/3.0f)*PPCM, height/2 + (2.5f/3.0f)*PPCM); 
-     }
-     else if (i == 3) {
-       text(letter++, width/2 - (2.0f-i)*PPCM + (2.0f/3.0f)*PPCM, height/2 + (2.5f/3.0f)*PPCM); 
-     }
-     else {
-      text(letter++, width/2 - (2.0f-i)*PPCM + (1.5f/3.0f)*PPCM, height/2 + (2.5f/3.0f)*PPCM); 
-     }
+      if (i == 0) 
+        pos = 1f/3f;
+      else if(i == 3)
+        pos = 2f/3f;
+      else
+        pos = 1f/2f;
+        
+      text(letter++, width/2 - (2f-i)*PPCM + pos*PPCM, height/2 + (5f/6f)*PPCM); 
+     
       textSize(35);
-      if (i != 0) {
-        //text(letter++, width/2 - (2.0-i)*PPCM + (0.5/3.0)*PPCM, height/2 + (2.5/3.0)*PPCM); //esquerda
-        if (i != 3) {
-          text(letter++, width/2 - (2.0f-i)*PPCM + (0.5f/3.0f)*PPCM, height/2 + (2.5f/3.0f)*PPCM); //esquerda
-          text(letter++, width/2 - (2.0f-i)*PPCM + (1.5f/3.0f)*PPCM, height/2 + (1.1f/3.0f)*PPCM); //cima
-        }
-        else {
-          text(letter++, width/2 - (2.0f-i)*PPCM + (1.0f/3.0f)*PPCM, height/2 + (2.5f/3.0f)*PPCM); //esquerda
-          text(letter++, width/2 - (2.0f-i)*PPCM + (2.0f/3.0f)*PPCM, height/2 + (1.1f/3.0f)*PPCM); //cima p direita
-        }
-      }
-      else { //primeiro quadro
-        text(letter++, width/2 - (2.0f-i)*PPCM + (1.0f/3.0f)*PPCM, height/2 + (1.1f/3.0f)*PPCM); //cima 
-      }
-      if (i != 3) {
-        if (i !=0) text(letter++, width/2 - (2.0f-i)*PPCM + (2.5f/3.0f)*PPCM, height/2 + (2.5f/3.0f)*PPCM); //direita
-        else text(letter++, width/2 - (2.0f-i)*PPCM + (2.2f/3.0f)*PPCM, height/2 + (2.5f/3.0f)*PPCM); //direita
-      }
+      
+      if (i != 0) 
+        text(letter++, width/2 - (2f-i)*PPCM + (pos-1f/3f)*PPCM, height/2 + (5f/6f)*PPCM); //left
+        
+      text(letter++, width/2 - (2f-i)*PPCM + pos*PPCM, height/2 + (1f/3f)*PPCM); //up
+      
+      if (i != 3)
+        text(letter++, width/2 - (2f-i)*PPCM + (pos+1f/3f)*PPCM, height/2 + (5f/6f)*PPCM); //right
+     
     }
     
     
@@ -189,14 +182,14 @@ void draw()
     //Third row
     for(int i = 0;i < 3;i++){
       
-      rect(width/2 - (2.0f-i*4.0f/3.0f)*PPCM, height/2 + 1.0f*PPCM, 4.0f/3.0f*PPCM, 1.0f*PPCM);
-      if (i == 0) text('_', width/2 - (2.0f-i*4.0f/3.0f)*PPCM + (2.0f/3.0f)*PPCM, height/2 + 1.0f*PPCM + (2.0f/3.0f)*PPCM); 
+      rect(width/2 - (2.0f-i*4.0f/3.0f)*PPCM, height/2 + 1f*PPCM, 4f/3f*PPCM, 1f*PPCM);
+      if (i == 0) text('_', width/2 - (2f-i*4f/3f)*PPCM + (2f/3f)*PPCM, height/2 + 1f*PPCM + (2f/3f)*PPCM); 
       if (i == 1) {
           imageMode(CENTER);
-          image(arrows, width/2 - (2.0f-i*4.0f/3.0f)*PPCM + (2.0f/3.0f)*PPCM, height/2 + 1.0f*PPCM + (1.5f/3.0f)*PPCM, arrows.width/7, arrows.height/7);
+          image(arrows, width/2 - (2f-i*4f/3f)*PPCM + (2f/3f)*PPCM, height/2 + 1f*PPCM + (1.5f/3f)*PPCM, arrows.width/7, arrows.height/7);
         
       }
-      if (i == 2) text("'", width/2 - (2.0f-i*4.0f/3.0f)*PPCM + (2.0f/3.0f)*PPCM, height/2 + 1.0f*PPCM + (2.0f/3.0f)*PPCM); 
+      if (i == 2) text("'", width/2 - (2f-i*4f/3f)*PPCM + (2f/3f)*PPCM, height/2 + 1f*PPCM + (2f/3f)*PPCM); 
   
     }
     
@@ -224,33 +217,82 @@ boolean didMouseClick(float x, float y, float w, float h)
   return (mouseX > x && mouseX < x + w && mouseY > y && mouseY < y + h);
 }
 
+
+int keyX,keyY;
+PVector begin=new PVector(0,0),end=new PVector(0,0);
+
+void mouseReleased(){
+  end = new PVector(mouseX,mouseY);
+  PVector v1,v2;
+  v1 = end.sub(begin);
+  v2 = new PVector(1,0);
+  char letter = 'a';
+  
+  if(keyY == 0){
+      letter += 4*keyX;
+  }else if(keyY == 1){
+    if(keyX == 0)
+      letter += 4*3;
+    else
+      letter += 4*3+3+4*(keyX-1);
+  }
+  
+  if(v1.mag() > PPCM){
+    float angle = PVector.angleBetween(v1,v2);
+    if(angle < PI/3){//right
+      if(keyY == 1 && keyX == 0)letter += 2;
+      else letter += 3;
+    }else if(angle < 2*PI/3){ //up or down
+      if(keyY == 1 && keyX == 0) letter += 1;
+      else letter += 2;
+    }else{ //left
+      if(keyY == 1 && keyX == 3);//do nothing
+      else letter += 1;
+    }
+  }
+  if(keyY != 2)currentTyped += letter;
+}
+
 void mousePressed()
 {
   if (didMouseClick(width/2 - 2*PPCM, 170, 4.0*PPCM, 2.0*PPCM)) nextTrial();                         // Test click on 'accept' button - do not change this!
   else if(didMouseClick(width/2 - 2.0*PPCM, height/2 - 1.0*PPCM, 4.0*PPCM, 3.0*PPCM))  // Test click on 'keyboard' area - do not change this condition! 
   {
     // YOUR KEYBOARD IMPLEMENTATION NEEDS TO BE IN HERE! (inside the condition)
+   
+    begin = new PVector(mouseX,mouseY);
     
-    // Test click on left arrow
-    if (didMouseClick(width/2 - ARROW_SIZE, height/2, ARROW_SIZE, ARROW_SIZE))
-    {
-      currentLetter--;
-      if (currentLetter < '_') currentLetter = 'z';                  // wrap around to z
+    //First row
+    for(int i = 0;i < 3;i++){
+      if(didMouseClick(width/2 - (2f-i*4f/3f)*PPCM, height/2 - 1f*PPCM, 4f/3f*PPCM, 1f*PPCM)){
+        keyX = i;
+        keyY = 0;
+        return;
+      }
     }
-    // Test click on right arrow
-    else if (didMouseClick(width/2, height/2, ARROW_SIZE, ARROW_SIZE))
-    {
-      currentLetter++;
-      if (currentLetter > 'z') currentLetter = '_';                  // wrap back to space (aka underscore)
+    
+    // Second row
+    for(int i = 0;i < 4;i++){
+      if(didMouseClick(width/2 - (2f-i)*PPCM, height/2, 1f*PPCM, 1f*PPCM)){
+        keyX = i;
+        keyY = 1;
+        return;
+      }
     }
-    // Test click on keyboard area (to confirm selection)
-    else
-    {
-      if (currentLetter == '_') currentTyped+=" ";                   // if underscore, consider that a space bar
-      else if (currentLetter == '`' && currentTyped.length() > 0)    // if `, treat that as a delete command
-        currentTyped = currentTyped.substring(0, currentTyped.length() - 1);
-      else if (currentLetter != '`') currentTyped += currentLetter;  // if not any of the above cases, add the current letter to the typed string
+    
+    //Third row
+    for(int i = 0;i < 3;i++){
+      if(didMouseClick(width/2 - (2f-i*4f/3f)*PPCM, height/2 + 1f*PPCM, 4f/3f*PPCM, 1f*PPCM)){
+        if (i == 0) currentTyped+=" ";                   // if underscore, consider that a space bar
+        else if (i == 2 && currentTyped.length() > 0)    // if `, treat that as a delete command
+          currentTyped = currentTyped.substring(0, currentTyped.length() - 1);
+        keyX = i;
+        keyY = 2;
+        return;
+      }
     }
+    
+    
   }
   else System.out.println("debug: CLICK NOT ACCEPTED");
 }
