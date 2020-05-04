@@ -48,6 +48,8 @@ float errorsTotal          = 0;     // a running total of the number of errors (
 
 
 
+ArrayList<String> frequentWords = new ArrayList<String>()[26]; 
+
 //Setup window and vars - runs once
 void setup()
 {
@@ -78,6 +80,9 @@ void setup()
   ARM_LENGTH = (int)(19 * PPCM);
   ARM_HEIGHT = (int)(11.2 * PPCM);
   ARROW_SIZE = (int)(2.2 * PPCM);
+  
+  
+  
 }
 
 void draw()
