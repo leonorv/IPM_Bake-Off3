@@ -182,7 +182,7 @@ void draw()
     //Third row
     for(int i = 0;i < 3;i++){
       
-      rect(width/2 - (2.0f-i*4.0f/3.0f)*PPCM, height/2 + 1f*PPCM, 4f/3f*PPCM, 1f*PPCM);
+      rect(width/2 - (2.0f-i*4f/3f)*PPCM, height/2 + 1f*PPCM, 4f/3f*PPCM, 1f*PPCM);
       if (i == 0) text('_', width/2 - (2f-i*4f/3f)*PPCM + (2f/3f)*PPCM, height/2 + 1f*PPCM + (2f/3f)*PPCM); 
       if (i == 1) {
           imageMode(CENTER);
@@ -219,44 +219,46 @@ boolean didMouseClick(float x, float y, float w, float h)
 
 
 int keyX,keyY;
-PVector begin=new PVector(0,0),end=new PVector(0,0);
+PVector begin,end;
 
 void mouseReleased(){
-  end = new PVector(mouseX,mouseY);
-  PVector v1,v2;
-  v1 = end.sub(begin);
-  v2 = new PVector(1,0);
-  char letter = 'a';
-  
-  if(keyY == 0){
-      letter += 4*keyX;
-  }else if(keyY == 1){
-    if(keyX == 0)
-      letter += 4*3;
-    else
-      letter += 4*3+3+4*(keyX-1);
-  }
-  
-  if(v1.mag() > PPCM){
-    float angle = PVector.angleBetween(v1,v2);
-    if(angle < PI/3){//right
-      if(keyY == 1 && keyX == 0)letter += 2;
-      else letter += 3;
-    }else if(angle < 2*PI/3){ //up or down
-      if(keyY == 1 && keyX == 0) letter += 1;
-      else letter += 2;
-    }else{ //left
-      if(keyY == 1 && keyX == 3);//do nothing
-      else letter += 1;
+  if(begin.x != 0){
+    end = new PVector(mouseX,mouseY);
+    PVector v1,v2;
+    v1 = end.sub(begin);
+    v2 = new PVector(1,0);
+    char letter = 'a';
+    
+    if(keyY == 0){
+        letter += 4*keyX;
+    }else if(keyY == 1){
+      if(keyX == 0)
+        letter += 4*3;
+      else
+        letter += 4*3+3+4*(keyX-1);
     }
+    
+    if(v1.mag() > 0.1*PPCM){
+      float angle = PVector.angleBetween(v1,v2);
+      if(angle < PI/4){//right
+        if(keyY == 1 && (keyX == 0 || keyX == 3))letter += 2;
+        else letter += 3;
+      }else if(angle < 3*PI/4){ //up or down
+        if(keyY == 1 && keyX == 0) letter += 1;
+        else letter += 2;
+      }else{ //left
+        letter += 1;
+      }
+    }
+    if(keyY != 2)currentTyped += letter;
   }
-  if(keyY != 2)currentTyped += letter;
 }
 
 void mousePressed()
 {
-  if (didMouseClick(width/2 - 2*PPCM, 170, 4.0*PPCM, 2.0*PPCM)) nextTrial();                         // Test click on 'accept' button - do not change this!
-  else if(didMouseClick(width/2 - 2.0*PPCM, height/2 - 1.0*PPCM, 4.0*PPCM, 3.0*PPCM))  // Test click on 'keyboard' area - do not change this condition! 
+  begin=new PVector(0,0);
+  if (didMouseClick(width/2 - 2*PPCM, 170, 4*PPCM, 2*PPCM)) nextTrial();                         // Test click on 'accept' button - do not change this!
+  else if(didMouseClick(width/2 - 2*PPCM, height/2 - 1*PPCM, 4*PPCM, 3*PPCM))  // Test click on 'keyboard' area - do not change this condition! 
   {
     // YOUR KEYBOARD IMPLEMENTATION NEEDS TO BE IN HERE! (inside the condition)
    
