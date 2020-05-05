@@ -13,6 +13,9 @@ import java.util.Random;
 float PPI, PPCM;
 float SCALE_FACTOR;
 
+//Flags 
+boolean hasStarted = false;
+
 // Finger parameters
 PImage fingerOcclusion;
 int FINGER_SIZE;
@@ -37,6 +40,7 @@ int currTrialNum           = 0;     // the current trial number (indexes into ph
 String currentPhrase       = "";    // the current target phrase
 String currentTyped        = "";    // what the user has typed so far
 char currentLetter         = 'a';
+String currentWord         = "";
 
 // Performance variables
 float startTime            = 0;     // time starts when the user clicks for the first time
@@ -47,9 +51,9 @@ float lettersExpectedTotal = 0;     // a running total of the number of letters 
 float errorsTotal          = 0;     // a running total of the number of errors (when hitting next)
 
 //Setup frequent words array
-ArrayList<StringList> frequentWords = new ArrayList<StringList>(26); //26 letters!
+ArrayList<StringList> frequentWords = new ArrayList<StringList>(); //26 letters!
 
-
+StringList recomendations = new StringList();
 
 
 //Setup window and vars - runs once
@@ -71,8 +75,11 @@ void setup()
   phrases = loadStrings("phrases.txt");                       // load the phrase set into memory
   Collections.shuffle(Arrays.asList(phrases), new Random());  // randomize the order of the phrases with no seed
   
+  for(int i=0; i< 26; i++) frequentWords.add(new StringList()); //initialize frequent words
+  
+  
   //Load and setup frequent words
-  String[] frequent_word = loadStrings("count_1w.txt");
+  String[] frequent_word = loadStrings("frequent_words.txt");
   for (String word: frequent_word) {
     int index = word.charAt(0) - 'a';
     frequentWords.get(index).append(word);
@@ -137,9 +144,11 @@ void draw()
     rect(width/2 - 2.0*PPCM, height/2 - 2.0*PPCM, 4.0*PPCM, 1.0*PPCM);
     textAlign(CENTER);
     fill(0);
-    /*textFont(createFont("Arial", 16));  // set the font to arial 24
-    text("NOT INTERACTIVE", width/2, height/2 - 1.3 * PPCM);             // draw current letter
-    textFont(createFont("Arial", 24));  // set the font to arial 24*/
+
+    
+    for (int i = 0; i < recomendations.size(); i++) { //print recomendations
+      text(recomendations.get(i), width/2 - (2.8-((i+1)*4.0)/3.0)*PPCM, height/2 - 1.5*PPCM);
+    }
     
     
     
@@ -192,8 +201,6 @@ void draw()
      
     }
     
-    
-    
     //Third row
     for(int i = 0;i < 3;i++){
       
@@ -226,7 +233,7 @@ int keyX,keyY;
 PVector begin,end;
 
 void mouseReleased(){
-  if(begin.x != 0){
+  if(begin.x != 0 && hasStarted){
     end = new PVector(mouseX,mouseY);
     PVector v1,v2;
     v1 = end.sub(begin);
@@ -244,18 +251,54 @@ void mouseReleased(){
     
     if(v1.mag() > 0.1*PPCM){
       float angle = PVector.angleBetween(v1,v2);
-      if(angle < PI/4){//right
-        if(keyY == 1 && (keyX == 0 || keyX == 3))letter += 2;
-        else letter += 3;
-      }else if(angle < 3*PI/4){ //up or down
-        if(keyY == 1 && keyX == 0) letter += 1;
-        else letter += 2;
-      }else{ //left
-        letter += 1;
+      
+      if (keyY < 2) {
+      
+      
+          if(angle < PI/4){//right
+            if(keyY == 1 && (keyX == 0 || keyX == 3))letter += 2;
+            else letter += 3;
+          }else if(angle < 3*PI/4){ //up or down
+            if(keyY == 1 && keyX == 0) letter += 1;
+            else letter += 2;
+          }else{ //left
+            letter += 1;
+          }
+      }
+      else if (keyX == 1) {
+          //for recomendations
+          if(angle < 4.0*PI/10){//right
+              currentTyped += recomendations.get(2).substring(currentWord.length(), recomendations.get(2).length()) + ' ';
+          }else if(angle < 6.0*PI/10){ //up or down
+              currentTyped += recomendations.get(1).substring(currentWord.length(), recomendations.get(1).length()) + ' ';
+          }else{ //left
+              currentTyped += recomendations.get(0).substring(currentWord.length(), recomendations.get(0).length()) + ' ';
+          }
+     }
+     
+    }
+    
+    
+    
+    if(keyY != 2) {
+      currentTyped += letter;
+      String[] currentWords = splitTokens(currentTyped);
+      currentWord = currentWords[currentWords.length - 1];
+     
+      
+      recomendations = new StringList();
+      
+      for (String word : frequentWords.get(currentWord.charAt(0) - 'a')) { //added recomendations
+        String subword;
+        if (word.length() >= currentWord.length()) subword = word.substring(0, currentWord.length());
+        else continue;
+        if (currentWord.equals(subword)) recomendations.append(word);
+        if (recomendations.size() == 3) break;
       }
     }
-    if(keyY != 2)currentTyped += letter;
   }
+  else hasStarted = true;
+  
 }
 
 void mousePressed()
