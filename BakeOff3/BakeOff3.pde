@@ -46,9 +46,11 @@ float lettersEnteredTotal  = 0;     // a running total of the number of letters 
 float lettersExpectedTotal = 0;     // a running total of the number of letters expected (correct phrases)
 float errorsTotal          = 0;     // a running total of the number of errors (when hitting next)
 
+//Setup frequent words array
+ArrayList<StringList> frequentWords = new ArrayList<StringList>(26); //26 letters!
 
 
-ArrayList<String> frequentWords = new ArrayList<String>()[26]; 
+
 
 //Setup window and vars - runs once
 void setup()
@@ -69,6 +71,13 @@ void setup()
   phrases = loadStrings("phrases.txt");                       // load the phrase set into memory
   Collections.shuffle(Arrays.asList(phrases), new Random());  // randomize the order of the phrases with no seed
   
+  //Load and setup frequent words
+  String[] frequent_word = loadStrings("count_1w.txt");
+  for (String word: frequent_word) {
+    int index = word.charAt(0) - 'a';
+    frequentWords.get(index).append(word);
+  }
+  
   // Scale targets and imagens to match screen resolution
   SCALE_FACTOR = 1.0 / displayDensity();          // scale factor for high-density displays
   String[] ppi_string = loadStrings("ppi.txt");   // the text from the file is loaded into an array.
@@ -80,8 +89,6 @@ void setup()
   ARM_LENGTH = (int)(19 * PPCM);
   ARM_HEIGHT = (int)(11.2 * PPCM);
   ARROW_SIZE = (int)(2.2 * PPCM);
-  
-  
   
 }
 
@@ -130,9 +137,12 @@ void draw()
     rect(width/2 - 2.0*PPCM, height/2 - 2.0*PPCM, 4.0*PPCM, 1.0*PPCM);
     textAlign(CENTER);
     fill(0);
-    textFont(createFont("Arial", 16));  // set the font to arial 24
+    /*textFont(createFont("Arial", 16));  // set the font to arial 24
     text("NOT INTERACTIVE", width/2, height/2 - 1.3 * PPCM);             // draw current letter
-    textFont(createFont("Arial", 24));  // set the font to arial 24
+    textFont(createFont("Arial", 24));  // set the font to arial 24*/
+    
+    
+    
     
     // THIS IS THE ONLY INTERACTIVE AREA (4cm x 4cm); do not change size
     stroke(0, 255, 0);
@@ -197,18 +207,7 @@ void draw()
       if (i == 2) text("'", width/2 - (2f-i*4f/3f)*PPCM + (2f/3f)*PPCM, height/2 + 1f*PPCM + (2f/3f)*PPCM); 
   
     }
-    
-    /* Write current letter
-    textAlign(CENTER);
-    fill(0);
-    text("" + currentLetter, width/2, height/2);             // draw current letter
-    
-    // Draw next and previous arrows
-    noFill();
-    imageMode(CORNER);
-    image(leftArrow, width/2 - ARROW_SIZE, height/2, ARROW_SIZE, ARROW_SIZE);
-    image(rightArrow, width/2, height/2, ARROW_SIZE, ARROW_SIZE);  
-    */
+
   }
   
   // Draw the user finger to illustrate the issues with occlusion (the fat finger problem)
