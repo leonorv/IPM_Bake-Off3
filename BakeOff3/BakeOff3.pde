@@ -13,6 +13,10 @@ import java.util.Random;
 float PPI, PPCM;
 float SCALE_FACTOR;
 
+float minSizeW;
+float minSizeH;
+float final_size;
+
 //Flags 
 boolean hasStarted = false;
 
@@ -140,13 +144,25 @@ void draw()
     // Draw screen areas
     // simulates text box - not interactive
     noStroke();
-    fill(125);
+    fill(211,211,211);
     rect(width/2 - 2.0*PPCM, height/2 - 2.0*PPCM, 4.0*PPCM, 1.0*PPCM);
     textAlign(CENTER);
     fill(0);
-
+    
+    final_size = 24;
     
     for (int i = 0; i < recomendations.size(); i++) { //print recomendations
+      // calculate minimum size to fit width
+      minSizeW = 24/textWidth(recomendations.get(i)) * (4.0*PPCM/3.5);
+      // calculate minimum size to fit height
+      minSizeH = 24 / (textDescent() + textAscent()) * 1.0*PPCM;
+      if (min(minSizeW, minSizeH) < final_size) {
+        final_size = min(minSizeW, minSizeH);
+      }
+    }
+    
+    for (int i = 0; i < recomendations.size(); i++) { //print recomendations
+      textSize(final_size);
       text(recomendations.get(i), width/2 - (2.8-((i+1)*4.0)/3.0)*PPCM, height/2 - 1.5*PPCM);
     }
     
@@ -166,9 +182,9 @@ void draw()
     for(int i = 0;i < 3;i++){
       rect(width/2 - (2f-i*4f/3f)*PPCM, height/2 - 1f*PPCM, 4f/3f*PPCM, 1f*PPCM);
       textAlign(CENTER);
-      textSize(50);
+      textSize(28);
       text(letter++, width/2 - (2f-i*4f/3f)*PPCM + (2f/3f)*PPCM, height/2 - 1f*(PPCM/2)); 
-      textSize(35);
+      textSize(20);
       text(letter++, width/2 - (2f-i*4f/3f)*PPCM + (1f/3f)*PPCM, height/2 - 1f*(PPCM/2)); //left
       text(letter++, width/2 - (2f-i*4f/3f)*PPCM + (2f/3f)*PPCM, height/2 - 1f*(PPCM/2) + (1f/3f)*PPCM); //down
       text(letter++, width/2 - (2f-i*4f/3f)*PPCM + 1f*PPCM, height/2 - 1f*(PPCM/2)); //right
@@ -178,7 +194,7 @@ void draw()
     float pos;
     for(int i = 0;i < 4;i++){
       rect(width/2 - (2f-i)*PPCM, height/2, 1f*PPCM, 1f*PPCM);
-      textSize(50);
+      textSize(28);
       
       if (i == 0) 
         pos = 1f/3f;
@@ -189,7 +205,7 @@ void draw()
         
       text(letter++, width/2 - (2f-i)*PPCM + pos*PPCM, height/2 + (5f/6f)*PPCM); 
      
-      textSize(35);
+      textSize(20);
       
       if (i != 0) 
         text(letter++, width/2 - (2f-i)*PPCM + (pos-1f/3f)*PPCM, height/2 + (5f/6f)*PPCM); //left
@@ -208,7 +224,7 @@ void draw()
       if (i == 0) text('_', width/2 - (2f-i*4f/3f)*PPCM + (2f/3f)*PPCM, height/2 + 1f*PPCM + (2f/3f)*PPCM); 
       if (i == 1) {
           imageMode(CENTER);
-          image(arrows, width/2 - (2f-i*4f/3f)*PPCM + (2f/3f)*PPCM, height/2 + 1f*PPCM + (1.5f/3f)*PPCM, arrows.width/7, arrows.height/7);
+          image(arrows, width/2 - (2f-i*4f/3f)*PPCM + (2f/3f)*PPCM, height/2 + 1f*PPCM + (1.5f/3f)*PPCM, arrows.width/12, arrows.height/12);
         
       }
       if (i == 2) text("'", width/2 - (2f-i*4f/3f)*PPCM + (2f/3f)*PPCM, height/2 + 1f*PPCM + (2f/3f)*PPCM); 
