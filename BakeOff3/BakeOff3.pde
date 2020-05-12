@@ -1,7 +1,7 @@
 
 // Bakeoff #3 - Escrita de Texto em Smartwatches
 // IPM 2019-20, Semestre 2
-// Entrega: exclusivamente no dia 22 de Maio, até às 23h59, via Twitter
+// Entrega: exclusivamente no dia 22 de Maio, até às 23h59, via Discord
 
 // Processing reference: https://processing.org/reference/
 
@@ -35,7 +35,9 @@ PImage leftArrow, rightArrow;
 int ARROW_SIZE;
 
 //Image arrow
-PImage arrows;
+PShape arrows;
+PShape delete;
+PShape space;
 
 // Study properties
 String[] phrases;                   // contains all the phrases that can be tested
@@ -60,6 +62,7 @@ ArrayList<StringList> frequentWords = new ArrayList<StringList>(); //26 letters!
 StringList recomendations = new StringList();
 
 
+
 //Setup window and vars - runs once
 void setup()
 {
@@ -73,11 +76,15 @@ void setup()
   fingerOcclusion = loadImage("finger.png");
   leftArrow = loadImage("left.png");
   rightArrow = loadImage("right.png");
-  arrows = loadImage("arrows.png");
+  arrows = loadShape("arrows.svg");
+  delete = loadShape("delete.svg");
+  space = loadShape("space.svg");
   
   // Load phrases
   phrases = loadStrings("phrases.txt");                       // load the phrase set into memory
   Collections.shuffle(Arrays.asList(phrases), new Random());  // randomize the order of the phrases with no seed
+  
+  
   
   for(int i=0; i< 26; i++) frequentWords.add(new StringList()); //initialize frequent words
   
@@ -127,19 +134,20 @@ void draw()
   else if (startTime != 0)
   {
     textAlign(LEFT);
+    textSize(28);
     fill(100);
-    text("Phrase " + (currTrialNum + 1) + " of " + NUM_REPEATS, width/2 - 4.0*PPCM, 50);   // write the trial count
+    text("Phrase " + (currTrialNum + 1) + " of " + NUM_REPEATS, width/2 - 4.0*PPCM, height/2 - 8.8*PPCM);   // write the trial count
     text("Target:    " + currentPhrase, width/2 - 4.0*PPCM, 100);                           // draw the target string
     fill(0);
-    text("Entered:  " + currentTyped + "|", width/2 - 4.0*PPCM, 140);                      // draw what the user has entered thus far 
+    text("Entered:  " + currentTyped + "|", width/2 - 4.0*PPCM, height/2 - 6.1*PPCM);                      // draw what the user has entered thus far 
     
     // Draw very basic ACCEPT button - do not change this!
     textAlign(CENTER);
     noStroke();
     fill(0, 250, 0);
-    rect(width/2 - 2*PPCM, 170, 4.0*PPCM, 2.0*PPCM);
+    rect(width/2 - 2*PPCM, height/2 - 5.1*PPCM, 4.0*PPCM, 2.0*PPCM);
     fill(0);
-    text("ACCEPT >", width/2, 220);
+    text("ACCEPT >", width/2, height/2 - 4.1*PPCM);
     
     // Draw screen areas
     // simulates text box - not interactive
@@ -182,9 +190,9 @@ void draw()
     for(int i = 0;i < 3;i++){
       rect(width/2 - (2f-i*4f/3f)*PPCM, height/2 - 1f*PPCM, 4f/3f*PPCM, 1f*PPCM);
       textAlign(CENTER);
-      textSize(28);
+      textSize(PPCM/2);
       text(letter++, width/2 - (2f-i*4f/3f)*PPCM + (2f/3f)*PPCM, height/2 - 1f*(PPCM/2)); 
-      textSize(20);
+      textSize(PPCM/3);
       text(letter++, width/2 - (2f-i*4f/3f)*PPCM + (1f/3f)*PPCM, height/2 - 1f*(PPCM/2)); //left
       text(letter++, width/2 - (2f-i*4f/3f)*PPCM + (2f/3f)*PPCM, height/2 - 1f*(PPCM/2) + (1f/3f)*PPCM); //down
       text(letter++, width/2 - (2f-i*4f/3f)*PPCM + 1f*PPCM, height/2 - 1f*(PPCM/2)); //right
@@ -194,7 +202,7 @@ void draw()
     float pos;
     for(int i = 0;i < 4;i++){
       rect(width/2 - (2f-i)*PPCM, height/2, 1f*PPCM, 1f*PPCM);
-      textSize(28);
+      textSize(PPCM/2);
       
       if (i == 0) 
         pos = 1f/3f;
@@ -205,7 +213,7 @@ void draw()
         
       text(letter++, width/2 - (2f-i)*PPCM + pos*PPCM, height/2 + (5f/6f)*PPCM); 
      
-      textSize(20);
+      textSize(PPCM/3);
       
       if (i != 0) 
         text(letter++, width/2 - (2f-i)*PPCM + (pos-1f/3f)*PPCM, height/2 + (5f/6f)*PPCM); //left
@@ -221,13 +229,23 @@ void draw()
     for(int i = 0;i < 3;i++){
       
       rect(width/2 - (2.0f-i*4f/3f)*PPCM, height/2 + 1f*PPCM, 4f/3f*PPCM, 1f*PPCM);
-      if (i == 0) text('_', width/2 - (2f-i*4f/3f)*PPCM + (2f/3f)*PPCM, height/2 + 1f*PPCM + (2f/3f)*PPCM); 
+      if (i == 0) {
+        shapeMode(CENTER);
+        shape(space, width/2 - (2f-i*4f/3f)*PPCM + (2f/3f)*PPCM, height/2 + 1f*PPCM + (2f/3f)*PPCM, PPCM/1.8, PPCM/1.8); 
+      }
       if (i == 1) {
-          imageMode(CENTER);
-          image(arrows, width/2 - (2f-i*4f/3f)*PPCM + (2f/3f)*PPCM, height/2 + 1f*PPCM + (1.5f/3f)*PPCM, arrows.width/12, arrows.height/12);
+          shapeMode(CENTER);
+          pushMatrix();
+          translate(width/2 - (2f-i*4f/3f)*PPCM + (2f/3f)*PPCM, height/2 + 1f*PPCM + (1.5f/3f)*PPCM);
+          rotate(-PI/4);
+          shape(arrows, 0 , 0, PPCM/1.3*arrows.width/arrows.height, PPCM/1.3);
+          popMatrix();
         
       }
-      if (i == 2) text("'", width/2 - (2f-i*4f/3f)*PPCM + (2f/3f)*PPCM, height/2 + 1f*PPCM + (2f/3f)*PPCM); 
+      if (i == 2) {
+        shapeMode(CENTER);
+        shape(delete, width/2 - (2f-i*4f/3f)*PPCM + (2f/3f)*PPCM, height/2 + 1f*PPCM + (1.5f/3f)*PPCM, PPCM/2.4*arrows.width/arrows.height, PPCM/2.4);
+      }
   
     }
 
@@ -281,7 +299,8 @@ void mouseReleased(){
             letter += 1;
           }
       }
-      else if (keyX == 1) {
+      else {
+        if(keyX == 1) {
           //for recomendations
           if(angle < 4.0*PI/10){//right
               currentTyped += recomendations.get(2).substring(currentWord.length(), recomendations.get(2).length()) + ' ';
@@ -290,28 +309,43 @@ void mouseReleased(){
           }else{ //left
               currentTyped += recomendations.get(0).substring(currentWord.length(), recomendations.get(0).length()) + ' ';
           }
-     }
+       }
+      }
      
-    }
+     
+      }
     
     
     
     if(keyY != 2) {
       currentTyped += letter;
-      String[] currentWords = splitTokens(currentTyped);
-      currentWord = currentWords[currentWords.length - 1];
-     
-      
-      recomendations = new StringList();
-      
-      for (String word : frequentWords.get(currentWord.charAt(0) - 'a')) { //added recomendations
-        String subword;
-        if (word.length() >= currentWord.length()) subword = word.substring(0, currentWord.length());
-        else continue;
-        if (currentWord.equals(subword)) recomendations.append(word);
-        if (recomendations.size() == 3) break;
-      }
     }
+      
+      if (currentTyped.length() > 0) {
+        String[] currentWords = splitTokens(currentTyped);
+        currentWord = currentWords[currentWords.length - 1];
+      
+   
+    
+    recomendations = new StringList();
+    
+      if (currentTyped.charAt(currentTyped.length()-1) != ' ') {
+        for (String word : frequentWords.get(currentWord.charAt(0) - 'a')) { //added recomendations
+          String subword;
+          if (word.length() >= currentWord.length()) subword = word.substring(0, currentWord.length());
+          else continue;
+          if (currentWord.equals(subword)) recomendations.append(word);
+          if (recomendations.size() == 3) break;
+        }
+      }
+      else {
+        currentWord = "";
+        recomendations.append("the");
+        recomendations.append("of");
+        recomendations.append("and");
+      }
+      
+     }
   }
   else hasStarted = true;
   
@@ -320,7 +354,7 @@ void mouseReleased(){
 void mousePressed()
 {
   begin=new PVector(0,0);
-  if (didMouseClick(width/2 - 2*PPCM, 170, 4*PPCM, 2*PPCM)) nextTrial();                         // Test click on 'accept' button - do not change this!
+  if (didMouseClick(width/2 - 2*PPCM, height/2 - 5.1*PPCM, 4.0*PPCM, 2.0*PPCM)) nextTrial();                         // Test click on 'accept' button - do not change this!
   else if(didMouseClick(width/2 - 2*PPCM, height/2 - 1*PPCM, 4*PPCM, 3*PPCM))  // Test click on 'keyboard' area - do not change this condition! 
   {
     // YOUR KEYBOARD IMPLEMENTATION NEEDS TO BE IN HERE! (inside the condition)
