@@ -1,4 +1,3 @@
-
 // Bakeoff #3 - Escrita de Texto em Smartwatches
 // IPM 2019-20, Semestre 2
 // Entrega: exclusivamente no dia 22 de Maio, até às 23h59, via Discord
@@ -39,6 +38,15 @@ PShape arrows;
 PShape delete;
 PShape space;
 
+//Image non-interactive
+PImage bcd;
+PImage fgh;
+PImage no;
+PImage uvw;
+PImage jkl;
+PImage yz;
+PImage qrs;
+
 // Study properties
 String[] phrases;                   // contains all the phrases that can be tested
 int NUM_REPEATS            = 2;     // the total number of phrases to be tested
@@ -47,6 +55,7 @@ String currentPhrase       = "";    // the current target phrase
 String currentTyped        = "";    // what the user has typed so far
 char currentLetter         = 'a';
 String currentWord         = "";
+String[] typed = new String[NUM_REPEATS];
 
 // Performance variables
 float startTime            = 0;     // time starts when the user clicks for the first time
@@ -60,8 +69,6 @@ float errorsTotal          = 0;     // a running total of the number of errors (
 ArrayList<StringList> frequentWords = new ArrayList<StringList>(); //26 letters!
 
 StringList recomendations = new StringList();
-
-
 
 //Setup window and vars - runs once
 void setup()
@@ -79,12 +86,17 @@ void setup()
   arrows = loadShape("arrows.svg");
   delete = loadShape("delete.svg");
   space = loadShape("space.svg");
+  bcd = loadImage("bcd.png");
+  fgh = loadImage("fgh.png");
+  jkl = loadImage("jkl.png");
+  no = loadImage("no.png");
+  qrs = loadImage("qrs.png");
+  uvw = loadImage("uvw.png");
+  yz = loadImage("yz.png");
   
   // Load phrases
   phrases = loadStrings("phrases.txt");                       // load the phrase set into memory
   Collections.shuffle(Arrays.asList(phrases), new Random());  // randomize the order of the phrases with no seed
-  
-  
   
   for(int i=0; i< 26; i++) frequentWords.add(new StringList()); //initialize frequent words
   
@@ -137,7 +149,7 @@ void draw()
     textSize(28);
     fill(100);
     text("Phrase " + (currTrialNum + 1) + " of " + NUM_REPEATS, width/2 - 4.0*PPCM, height/2 - 8.1*PPCM);   // write the trial count
-    text("Target:    " + currentPhrase, width/2 - 4.0*PPCM, 100);                           // draw the target string
+    text("Target:    " + currentPhrase, width/2 - 4.0*PPCM, height/2 - 7.1*PPCM);                           // draw the target string
     fill(0);
     text("Entered:  " + currentTyped + "|", width/2 - 4.0*PPCM, height/2 - 6.1*PPCM);                      // draw what the user has entered thus far 
     
@@ -169,9 +181,46 @@ void draw()
       }
     }
     
-    for (int i = 0; i < recomendations.size(); i++) { //print recomendations
-      textSize(final_size);
-      text(recomendations.get(i), width/2 - (2.8-((i+1)*4.0)/3.0)*PPCM, height/2 - 1.5*PPCM);
+    if (keyX == 0 && keyY == 0) {
+      imageMode(CORNER);
+      image(bcd, width/2 - 2.0*PPCM, height/2 - 2.0*PPCM, 4.0*PPCM, 1.0*PPCM);
+    }
+    
+    else if (keyX == 1 && keyY == 0) {
+      imageMode(CORNER);
+      image(fgh, width/2 - 2.0*PPCM, height/2 - 2.0*PPCM, 4.0*PPCM, 1.0*PPCM);
+    }
+    
+    else if (keyX == 2 && keyY == 0) {
+      imageMode(CORNER);
+      image(jkl, width/2 - 2.0*PPCM, height/2 - 2.0*PPCM, 4.0*PPCM, 1.0*PPCM);
+    }
+    
+    else if (keyX == 0 && keyY == 1) {
+      imageMode(CORNER);
+      image(no, width/2 - 2.0*PPCM, height/2 - 2.0*PPCM, 4.0*PPCM, 1.0*PPCM);
+    }
+    
+    else if (keyX == 1 && keyY == 1) {
+      imageMode(CORNER);
+      image(qrs, width/2 - 2.0*PPCM, height/2 - 2.0*PPCM, 4.0*PPCM, 1.0*PPCM);
+    }
+    
+    else if (keyX == 2 && keyY == 1) {
+      imageMode(CORNER);
+      image(uvw, width/2 - 2.0*PPCM, height/2 - 2.0*PPCM, 4.0*PPCM, 1.0*PPCM);
+    }
+    
+    else if (keyX == 3 && keyY == 1) {
+      imageMode(CORNER);
+      image(yz, width/2 - 2.0*PPCM, height/2 - 2.0*PPCM, 4.0*PPCM, 1.0*PPCM);
+    }
+    
+    else {
+      for (int i = 0; i < recomendations.size(); i++) { //print recomendations
+        textSize(final_size);
+        text(recomendations.get(i), width/2 - (2.8-((i+1)*4.0)/3.0)*PPCM, height/2 - 1.5*PPCM);
+      }
     }
     
     
@@ -184,24 +233,41 @@ void draw()
     
     stroke(0);
     
-    char letter = 'a';
+    char letter = 'A';
 
     //First row
     for(int i = 0;i < 3;i++){
-      rect(width/2 - (2f-i*4f/3f)*PPCM, height/2 - 1f*PPCM, 4f/3f*PPCM, 1f*PPCM);
+      pushMatrix();
+      pushStyle();
+      translate(width/2 - (2f-i*4f/3f)*PPCM, height/2 - 1f*PPCM);
+      if(keyY == 0 && keyX == i) {
+        strokeWeight(2.0);
+      }
+      
+      rect(0, 0, 4f/3f*PPCM, 1f*PPCM);
+      stroke(0);
       textAlign(CENTER);
       textSize(PPCM/2);
-      text(letter++, width/2 - (2f-i*4f/3f)*PPCM + (2f/3f)*PPCM, height/2 - 1f*(PPCM/2)); 
+      text(letter++, (2f/3f)*PPCM, 1f*(PPCM/2)); 
       textSize(PPCM/3);
-      text(letter++, width/2 - (2f-i*4f/3f)*PPCM + (1f/3f)*PPCM, height/2 - 1f*(PPCM/2)); //left
-      text(letter++, width/2 - (2f-i*4f/3f)*PPCM + (2f/3f)*PPCM, height/2 - 1f*(PPCM/2) + (1f/3f)*PPCM); //down
-      text(letter++, width/2 - (2f-i*4f/3f)*PPCM + 1f*PPCM, height/2 - 1f*(PPCM/2)); //right
+      text(letter++,(1f/3f)*PPCM, 1f*(PPCM/2)); //left
+      text(letter++,(2f/3f)*PPCM, 1f*(PPCM/2) + (1f/3f)*PPCM); //down
+      text(letter++, 1f*PPCM, 1f*(PPCM/2)); //right
+     
+      popStyle();
+      popMatrix();
     }
     
     // Second row
     float pos;
     for(int i = 0;i < 4;i++){
-      rect(width/2 - (2f-i)*PPCM, height/2, 1f*PPCM, 1f*PPCM);
+      pushMatrix();
+      pushStyle();
+      translate(width/2 - (2f-i)*PPCM, height/2);
+      if(keyY == 1 && keyX == i) {
+        strokeWeight(2.0);
+      }
+      rect(0, 0, 1f*PPCM, 1f*PPCM);
       textSize(PPCM/2);
       
       if (i == 0) 
@@ -211,32 +277,40 @@ void draw()
       else
         pos = 1f/2f;
         
-      text(letter++, width/2 - (2f-i)*PPCM + pos*PPCM, height/2 + (5f/6f)*PPCM); 
+      text(letter++, pos*PPCM, (5f/6f)*PPCM); 
      
       textSize(PPCM/3);
       
       if (i != 0) 
-        text(letter++, width/2 - (2f-i)*PPCM + (pos-1f/3f)*PPCM, height/2 + (5f/6f)*PPCM); //left
+        text(letter++, (pos-1f/3f)*PPCM, (5f/6f)*PPCM); //left
         
-      text(letter++, width/2 - (2f-i)*PPCM + pos*PPCM, height/2 + (1f/3f)*PPCM); //up
+      text(letter++, pos*PPCM, (1f/3f)*PPCM); //up
       
       if (i != 3)
-        text(letter++, width/2 - (2f-i)*PPCM + (pos+1f/3f)*PPCM, height/2 + (5f/6f)*PPCM); //right
+        text(letter++, (pos+1f/3f)*PPCM, (5f/6f)*PPCM); //right
+        
+      popStyle();
+      popMatrix();
      
     }
     
     //Third row
     for(int i = 0;i < 3;i++){
-      
-      rect(width/2 - (2.0f-i*4f/3f)*PPCM, height/2 + 1f*PPCM, 4f/3f*PPCM, 1f*PPCM);
+      pushMatrix();
+      pushStyle();
+      translate(width/2 - (2.0f-i*4f/3f)*PPCM,height/2 + 1f*PPCM);
+      if(keyY == 2 && keyX == i) {
+        strokeWeight(2.0);
+      }
+      rect(0,0, 4f/3f*PPCM, 1f*PPCM);
       if (i == 0) {
         shapeMode(CENTER);
-        shape(space, width/2 - (2f-i*4f/3f)*PPCM + (2f/3f)*PPCM, height/2 + 1f*PPCM + (2f/3f)*PPCM, PPCM/1.8, PPCM/1.8); 
+        shape(space,(2f/3f)*PPCM,(2f/3f)*PPCM, PPCM/1.8, PPCM/1.8); 
       }
       if (i == 1) {
           shapeMode(CENTER);
           pushMatrix();
-          translate(width/2 - (2f-i*4f/3f)*PPCM + (2f/3f)*PPCM, height/2 + 1f*PPCM + (1.5f/3f)*PPCM);
+          translate((2f/3f)*PPCM,(1.5f/3f)*PPCM);
           rotate(-PI/4);
           shape(arrows, 0 , 0, PPCM/1.3*arrows.width/arrows.height, PPCM/1.3);
           popMatrix();
@@ -244,9 +318,10 @@ void draw()
       }
       if (i == 2) {
         shapeMode(CENTER);
-        shape(delete, width/2 - (2f-i*4f/3f)*PPCM + (2f/3f)*PPCM, height/2 + 1f*PPCM + (1.5f/3f)*PPCM, PPCM/2.4*arrows.width/arrows.height, PPCM/2.4);
+        shape(delete,(2f/3f)*PPCM,(1.5f/3f)*PPCM, PPCM/2.4*arrows.width/arrows.height, PPCM/2.4);
       }
-  
+      popStyle();
+      popMatrix();
     }
 
   }
@@ -313,7 +388,7 @@ void mouseReleased(){
       }
      
      
-      }
+     }
     
     
     
@@ -348,7 +423,8 @@ void mouseReleased(){
      }
   }
   else hasStarted = true;
-  
+  keyX = -1;
+  keyY = -1;
 }
 
 void mousePressed()
@@ -370,6 +446,7 @@ void mousePressed()
       }
     }
     
+    
     // Second row
     for(int i = 0;i < 4;i++){
       if(didMouseClick(width/2 - (2f-i)*PPCM, height/2, 1f*PPCM, 1f*PPCM)){
@@ -390,7 +467,6 @@ void mousePressed()
         return;
       }
     }
-    
     
   }
   else System.out.println("debug: CLICK NOT ACCEPTED");
@@ -417,6 +493,7 @@ void nextTrial()
     lettersExpectedTotal += currentPhrase.trim().length();
     lettersEnteredTotal += currentTyped.trim().length();
     errorsTotal += computeLevenshteinDistance(currentTyped.trim(), currentPhrase.trim());
+    typed[currTrialNum] = currentTyped;
   }
   
   // Check to see if experiment just finished
@@ -432,12 +509,12 @@ void nextTrial()
 
     float wpm = (lettersEnteredTotal / 5.0f) / ((finishTime - startTime) / 60000f);   // FYI - 60K is number of milliseconds in minute
     float freebieErrors = lettersExpectedTotal * .05;                                 // no penalty if errors are under 5% of chars
-    float penalty = max(errorsTotal - freebieErrors, 0) * .5f;
+    float penalty = max(0, (errorsTotal - freebieErrors) / ((finishTime - startTime) / 60000f));
     
     System.out.println("Raw WPM: " + wpm);
     System.out.println("Freebie errors: " + freebieErrors);
     System.out.println("Penalty: " + penalty);
-    System.out.println("WPM w/ penalty: " + (wpm - penalty));                         // yes, minus, because higher WPM is better
+    System.out.println("WPM w/ penalty: " + (wpm - penalty));                         // yes, minus, because higher WPM is better: NET WPM
     System.out.println("==================");
     
     printResults(wpm, freebieErrors, penalty);
@@ -468,10 +545,17 @@ void printResults(float wpm, float freebieErrors, float penalty)
   text(day() + "/" + month() + "/" + year() + "  " + hour() + ":" + minute() + ":" + second(), 100, 20);   // display time on screen
   
   text("Finished!", width / 2, height / 2); 
-  text("Raw WPM: " + wpm, width / 2, height / 2 + 20);
-  text("Freebie errors: " + freebieErrors, width / 2, height / 2 + 40);
-  text("Penalty: " + penalty, width / 2, height / 2 + 60);
-  text("WPM with penalty: " + (wpm - penalty), width / 2, height / 2 + 80);
+  
+  int h = 20;
+  for(int i = 0; i < NUM_REPEATS; i++, h += 40 ) {
+    text("Target phrase " + (i+1) + ": " + phrases[i], width / 2, height / 2 + h);
+    text("User typed " + (i+1) + ": " + typed[i], width / 2, height / 2 + h+20);
+  }
+  
+  text("Raw WPM: " + wpm, width / 2, height / 2 + h+20);
+  text("Freebie errors: " + freebieErrors, width / 2, height / 2 + h+40);
+  text("Penalty: " + penalty, width / 2, height / 2 + h+60);
+  text("WPM with penalty: " + max((wpm - penalty), 0), width / 2, height / 2 + h+80);
 
   saveFrame("results-######.png");    // saves screenshot in current folder    
 }
