@@ -1,9 +1,9 @@
 --INSTRUÇÕES--
 
  - cada tecla tem o formato:   
-	b
+	          b
                 c a d
-	 e
+	          e
 
 - para escolher a letra 'a', basta um clique
 - para escolher 'b', deslizar o dedo para cima (carregando na tecla)

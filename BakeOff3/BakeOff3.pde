@@ -120,6 +120,9 @@ void setup()
   ARM_HEIGHT = (int)(11.2 * PPCM);
   ARROW_SIZE = (int)(2.2 * PPCM);
   
+  arm.resize(ARM_LENGTH, ARM_HEIGHT);
+  fingerOcclusion.resize(FINGER_SIZE, FINGER_SIZE);       
+  
 }
 
 void draw()
@@ -131,7 +134,7 @@ void draw()
   
   // Draw arm and watch background
   imageMode(CENTER);
-  image(arm, width/2, height/2, ARM_LENGTH, ARM_HEIGHT);
+  image(arm, width/2, height/2);
   
   // Check if we just started the application
   if (startTime == 0 && !mousePressed)
@@ -328,7 +331,7 @@ void draw()
   
   // Draw the user finger to illustrate the issues with occlusion (the fat finger problem)
   imageMode(CORNER);
-  image(fingerOcclusion, mouseX - FINGER_OFFSET, mouseY - FINGER_OFFSET, FINGER_SIZE, FINGER_SIZE);
+  image(fingerOcclusion, mouseX - FINGER_OFFSET, mouseY - FINGER_OFFSET);
 }
 
 // Check if mouse click was within certain bounds
