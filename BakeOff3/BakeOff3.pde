@@ -46,6 +46,7 @@ PImage uvw;
 PImage jkl;
 PImage yz;
 PImage qrs;
+PImage arrows2;
 
 // Study properties
 String[] phrases;                   // contains all the phrases that can be tested
@@ -93,6 +94,7 @@ void setup()
   qrs = loadImage("qrs.png");
   uvw = loadImage("uvw.png");
   yz = loadImage("yz.png");
+  arrows2 = loadImage("arrows2.png");
   
   // Load phrases
   phrases = loadStrings("phrases.txt");                       // load the phrase set into memory
@@ -166,7 +168,7 @@ void draw()
     
     // Draw screen areas
     // simulates text box - not interactive
-    noStroke();
+    stroke(0);
     fill(211,211,211);
     rect(width/2 - 2.0*PPCM, height/2 - 2.0*PPCM, 4.0*PPCM, 1.0*PPCM);
     textAlign(CENTER);
@@ -186,46 +188,44 @@ void draw()
     
     if (keyX == 0 && keyY == 0) {
       imageMode(CORNER);
-      image(bcd, width/2 - 2.0*PPCM, height/2 - 2.0*PPCM, 4.0*PPCM, 1.0*PPCM);
+      image(bcd, width/2 - 1.9*PPCM, height/2 - 1.9*PPCM, 3.8*PPCM, 0.8*PPCM);
     }
     
     else if (keyX == 1 && keyY == 0) {
       imageMode(CORNER);
-      image(fgh, width/2 - 2.0*PPCM, height/2 - 2.0*PPCM, 4.0*PPCM, 1.0*PPCM);
+      image(fgh, width/2 - 1.9*PPCM, height/2 - 1.9*PPCM, 3.8*PPCM, 0.8*PPCM);
     }
     
     else if (keyX == 2 && keyY == 0) {
       imageMode(CORNER);
-      image(jkl, width/2 - 2.0*PPCM, height/2 - 2.0*PPCM, 4.0*PPCM, 1.0*PPCM);
+      image(jkl, width/2 - 1.9*PPCM, height/2 - 1.9*PPCM, 3.8*PPCM, 0.8*PPCM);
     }
     
     else if (keyX == 0 && keyY == 1) {
       imageMode(CORNER);
-      image(no, width/2 - 2.0*PPCM, height/2 - 2.0*PPCM, 4.0*PPCM, 1.0*PPCM);
+      image(no, width/2 - 1.9*PPCM, height/2 - 1.9*PPCM, 3.8*PPCM, 0.8*PPCM);
     }
     
     else if (keyX == 1 && keyY == 1) {
       imageMode(CORNER);
-      image(qrs, width/2 - 2.0*PPCM, height/2 - 2.0*PPCM, 4.0*PPCM, 1.0*PPCM);
+      image(qrs, width/2 - 1.9*PPCM, height/2 - 1.9*PPCM, 3.8*PPCM, 0.8*PPCM);
     }
     
     else if (keyX == 2 && keyY == 1) {
       imageMode(CORNER);
-      image(uvw, width/2 - 2.0*PPCM, height/2 - 2.0*PPCM, 4.0*PPCM, 1.0*PPCM);
+      image(uvw, width/2 - 1.9*PPCM, height/2 - 1.9*PPCM, 3.8*PPCM, 0.8*PPCM);
     }
     
     else if (keyX == 3 && keyY == 1) {
       imageMode(CORNER);
-      image(yz, width/2 - 2.0*PPCM, height/2 - 2.0*PPCM, 4.0*PPCM, 1.0*PPCM);
+      image(yz, width/2 - 1.9*PPCM, height/2 - 1.9*PPCM, 3.8*PPCM, 0.8*PPCM);
     }
-    
     else {
       for (int i = 0; i < recomendations.size(); i++) { //print recomendations
         textSize(final_size);
         text(recomendations.get(i), width/2 - (2.8-((i+1)*4.0)/3.0)*PPCM, height/2 - 1.5*PPCM);
       }
     }
-    
     
     
     
@@ -326,7 +326,11 @@ void draw()
       popStyle();
       popMatrix();
     }
-
+    if (keyX == 1 && keyY == 2) {
+      imageMode(CENTER);
+      image(arrows2, width/2, height/2 + 0.55f*PPCM);
+      arrows2.resize(157,120);
+    }
   }
   
   // Draw the user finger to illustrate the issues with occlusion (the fat finger problem)
@@ -378,7 +382,7 @@ void mouseReleased(){
           }
       }
       else {
-        if(keyX == 1) {
+        if(keyX == 1 && currentTyped.length() > 0) {
           //for recomendations
           if(angle < 4.0*PI/10){//right
               currentTyped += recomendations.get(2).substring(currentWord.length(), recomendations.get(2).length()) + ' ';
