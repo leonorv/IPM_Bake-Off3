@@ -219,6 +219,7 @@ void draw()
       image(yz, width/2 - 2.0*PPCM, height/2 - 2.0*PPCM, 4.0*PPCM, 1.0*PPCM);
     }
     
+    
     else {
       for (int i = 0; i < recomendations.size(); i++) { //print recomendations
         textSize(final_size);
@@ -280,7 +281,7 @@ void draw()
       else
         pos = 1f/2f;
         
-      text(letter++, pos*PPCM, (5f/6f)*PPCM); 
+      text(letter++, pos*PPCM, (5f/6f)*PPCM);
      
       textSize(PPCM/3);
       
@@ -511,6 +512,7 @@ void nextTrial()
     System.out.println("Total errors entered: " + errorsTotal);
 
     float wpm = (lettersEnteredTotal / 5.0f) / ((finishTime - startTime) / 60000f);   // FYI - 60K is number of milliseconds in minute
+    float cps = lettersEnteredTotal / ((finishTime - startTime) / 1000f);
     float freebieErrors = lettersExpectedTotal * .05;                                 // no penalty if errors are under 5% of chars
     float penalty = max(0, (errorsTotal - freebieErrors) / ((finishTime - startTime) / 60000f));
     
@@ -518,6 +520,7 @@ void nextTrial()
     System.out.println("Freebie errors: " + freebieErrors);
     System.out.println("Penalty: " + penalty);
     System.out.println("WPM w/ penalty: " + (wpm - penalty));                         // yes, minus, because higher WPM is better: NET WPM
+    System.out.println("Characters per second: " + cps);
     System.out.println("==================");
     
     printResults(wpm, freebieErrors, penalty);
