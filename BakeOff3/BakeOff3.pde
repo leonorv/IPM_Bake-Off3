@@ -526,7 +526,7 @@ void nextTrial()
     System.out.println("Characters per second: " + cps);
     System.out.println("==================");
     
-    printResults(wpm, freebieErrors, penalty);
+    printResults(wpm, freebieErrors, penalty, cps);
     
     currTrialNum++;                                                                   // increment by one so this mesage only appears once when all trials are done
     return;
@@ -545,7 +545,7 @@ void nextTrial()
 }
 
 // Print results at the end of the study
-void printResults(float wpm, float freebieErrors, float penalty)
+void printResults(float wpm, float freebieErrors, float penalty, float cps)
 {
   background(0);       // clears screen
   
@@ -565,6 +565,7 @@ void printResults(float wpm, float freebieErrors, float penalty)
   text("Freebie errors: " + freebieErrors, width / 2, height / 2 + h+40);
   text("Penalty: " + penalty, width / 2, height / 2 + h+60);
   text("WPM with penalty: " + max((wpm - penalty), 0), width / 2, height / 2 + h+80);
+  text("Characters per second: " + cps, width / 2, height / 2 + h+100);
 
   saveFrame("results-######.png");    // saves screenshot in current folder    
 }
